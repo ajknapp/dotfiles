@@ -1,0 +1,269 @@
+(require 'package)
+(setq package-enable-at-startup nil)
+(package-initialize)
+
+(require 'org)
+(require 'ox)
+(require 'ox-beamer)
+(require 'ox-latex)
+(require 'cl)
+(setq org-export-async-debug nil)
+
+(setq org-publish-project-alist
+      '(
+
+        ("org-ajknapp"
+         ;; Path to your org files.
+         :base-directory "~/projects/ajknapp.github.io/org/"
+         :base-extension "org"
+
+         ;; Path to your Jekyll project.
+         :publishing-directory "~/projects/ajknapp.github.io/deploy/"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :headline-levels 4
+         :html-extension "html"
+         :with-toc nil
+         :body-only t ;; Only export section between <body> </body>
+         :section-numbers nil
+         )
+
+        ("org-static-ajknapp"
+         :base-directory "~/projects/ajknapp.github.io/org/"
+         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|mp3\\|ogg\\|swf"
+         :publishing-directory "~/projects/ajknapp.github.io/deploy/"
+         :recursive t
+         :publishing-function org-publish-attachment)
+
+        ("tex-ajknapp"
+         :base-directory "~/projects/ajknapp.github.io/")
+
+        ("ajknapp" :components ("org-ajknapp" "org-static-ajknapp"))
+
+        ))
+
+;; set up org project publishing
+;; (setq org-publish-project-alist
+;;       '(("website" :components ("website-content" "website-static"))
+        
+;;         ;; ("website-static"
+;;         ;;  :base-directory "~/projects/shibumi/"
+;;         ;;  :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|ico"
+;;         ;;  :publishing-directory "~/projects/shibumi_site"
+;;         ;;  :recursive t
+;;         ;;  :publishing-function org-publish-attachment
+;;         ;;  )
+;;         ;; ("website-pdfs"
+;;         ;;  :base-directory "~/projects/shibumi/"
+;;         ;;  :base-extension "org"
+;;         ;;  :exclude "index"
+;;         ;;  :publishing-directory "~/projects/shibumi_site"
+;;         ;;  :recursive t
+;;         ;;  :publishing-function org-latex-publish-to-pdf
+;;         ;;  :export-with-tags nil
+;;         ;;  :headline-levels 4
+;;         ;;  :table-of-contents nil
+;;         ;;  :section-numbers nil
+;;         ;;  :sub-superscript nil
+;;         ;;  :with-todo-keywords nil
+;;         ;;  :with-author nil
+;;         ;;  :language "en"
+;;         ;;  :auto-index t
+;;         ;;  :creator-info nil
+;;         ;;  )
+;;         ;; ("website-content"
+;; ;;          :base-directory "~/projects/shibumi/"
+;; ;;          :base-extension "org"
+;; ;;          :publishing-directory "~/projects/shibumi_site"
+;; ;;          :recursive t
+;; ;;          :publishing-function org-html-publish-to-html
+;; ;;          :export-with-tags nil
+;; ;;          :headline-levels 4
+;; ;;          :table-of-contents nil
+;; ;;          :section-numbers nil
+;; ;;          :sub-superscript nil
+;; ;;          :with-todo-keywords nil
+;; ;;          :with-author t
+;; ;;          :html-doctype "xhtml-strict"
+;; ;;          :language "en"
+;; ;;          :auto-index t
+;; ;;          :creator-info nil
+;; ;;          :html-head "<meta  http-equiv='Content-Type' content='text/html;charset=utf-8' />
+;; ;; <meta  name='viewport' content='width=device-width, initial-scale=1' />
+;; ;; <link href='/css/normalize.css' rel='stylesheet' type='text/css' />
+;; ;; <link href='/css/styles.css' rel='stylesheet' type='text/css' />
+;; ;; <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />"
+;; ;;          :html-preamble "<div id='navbar'>
+;; ;; <div id='author'>
+;; ;; Darcy James Montesquieu
+;; ;; </div>
+;; ;; <div id='nav'>
+;; ;; <ul class='nav'>
+;; ;; <li id='home'><a href='/'>Home</a></li>
+;; ;; <li id='about'><a href='/about/'>About</a></li>
+;; ;; <li id='creations'><a href='/stuff/'>Stuff</a></li>
+;; ;; <li id='contact'><a href='/contact/'>Contact</a></li>
+;; ;; <li id='rss'><a href='/rss.xml'>RSS</a></li>
+;; ;; </ul>
+;; ;; </div>
+;; ;; <div id='title'>
+;; ;; The Rising Sea
+;; ;; </div>
+;; ;; </div>"
+;; ;;          :html-postamble "<div id='foot'>
+;; ;; <img src='/img/signature.png' alt='Sola Gloria Deo'> <br />
+;; ;; Copyright &#xA9; 2016 Aerimore ru Kalo<br />
+;; ;; All Rights Reserved <br /> <br />
+;; ;; </div>"
+;; ;;          :timestamp t
+;; ;;          :exclude-tags ("noexport" "todo")
+;; ;;          )
+;;         ))
+(setq org-list-allow-alphabetical t)
+(setq org-html-head-include-default-style nil)
+(setq org-latex-packages-alist '(
+                                 ;; ("intlimits" "kpfonts" t)
+                                 ;; ("paperheight=9in, paperwidth=6in, top=0.75in, bottom=0.75in" "geometry" t)
+                                 ;; ("margin=1.5in" "geometry" t)
+                                 ;; ("" "gillius2" t)
+                                 ;; ("scale=0.85" "sourcecodepro")
+                                 ("" "upquote" t)
+                                 ("" "unicode-math" t)
+                                 ("" "fontspec" t)
+                                 ;; ("scale=0.95" "sourcecodepro" t)
+                                 ;; ("" "stix")
+                                 ;; ("variant=B" "fedraserif")
+                                 ("" "setspace")
+                                 ("" "aliascnt" t)
+                                 ("" "etoolbox")
+                                 ("" "tikz")
+                                 ;; ("activate={true,nocompatibility}, final, tracking=true, kerning=true, spacing=true, factor=1200, stretch=40, shrink=50" "microtype" t)
+                                 ("" "titlesec}
+% \\SetTracking{encoding={*}, shape=sc}{0}
+% \\SetTracking{encoding={*}, shape=normal}{0}
+% \\setstretch{1.1}
+% \\appto\\verbatim{\\singlespacing}
+\\makeatletter
+\\let\\th@plain\\relax
+\\makeatother
+
+\\usepackage{framed}
+\\usepackage[framed]{ntheorem}
+
+\\theorembodyfont{\\normalfont}
+
+% environments
+\\newframedtheorem{theorem}{Theorem}[section]
+\\newaliascnt{lemma}{theorem}
+    \\newframedtheorem{lemma}[lemma]{Lemma}
+    \\aliascntresetthe{lemma}
+    \\providecommand*{\\lemmaautorefname}{Lemma}
+\\newaliascnt{proposition}{theorem}
+    \\newframedtheorem{proposition}[proposition]{Proposition}
+    \\aliascntresetthe{proposition}
+    \\providecommand*{\\propositionautorefname}{Proposition}
+\\newaliascnt{corollary}{theorem}
+    \\newframedtheorem{corollary}[corollary]{Corollary}
+    \\aliascntresetthe{corollary}
+    \\providecommand*{\\corollaryautorefname}{Corollary}
+
+\\newaliascnt{definition}{theorem}
+    \\newframedtheorem{definition}[definition]{Definition}
+    \\aliascntresetthe{definition}
+    \\providecommand*{\\definitionautorefname}{Definition}
+\\newaliascnt{example}{theorem}
+    \\newframedtheorem{example}[example]{Example}
+    \\aliascntresetthe{example}
+    \\providecommand*{\\exampleautorefname}{Example}
+\\newaliascnt{remark}{theorem}
+    \\newframedtheorem{remark}[remark]{Remark}
+    \\aliascntresetthe{remark}
+    \\providecommand*{\\remarkautorefname}{Remark}
+
+\\theoremstyle{nonumberplain}
+
+\\newframedtheorem{theoremx}{Theorem}
+\\newframedtheorem{lemmax}{Lemma}
+\\newframedtheorem{definitionx}{Definition}
+\\newframedtheorem{problem}{Problem}
+\\newframedtheorem{exercise}{Exercise}
+
+\\makeatletter
+\\DeclareRobustCommand{\\qed}{%
+  \\ifmmode % if math mode, assume display: omit penalty etc.
+  \\else \\leavevmode\\unskip\\penalty9999 \\hbox{}\\nobreak\\hfill
+  \\fi
+  \\quad\\hbox{\\qedsymbol}}
+\\newcommand{\\openbox}{\\leavevmode
+  \\hbox to.77778em{%
+  \\hfil\\vrule
+  \\vbox to.675em{\\hrule width.6em\\vfil\\hrule}%
+  \\vrule\\hfil}}
+\\renewcommand{\\qedsymbol}{\\openbox}
+\\newenvironment{proof}[1][\\proofname]{\\par
+  \\normalfont
+  \\topsep6\\p@\\@plus6\\p@ \\trivlist
+  \\item[\\hskip\\labelsep\\itshape
+    #1.]\\ignorespaces
+}{%
+  \\qed\\endtrivlist
+}
+\\newcommand{\\proofname}{Proof}
+\\makeatother
+
+
+\\titleformat{\\section}
+  {\\normalfont\\sffamily\\Large\\bfseries}
+  {\\thesection\\ }{1em}{}
+\\titleformat{\\subsection}
+  {\\normalfont\\sffamily\\bfseries}
+  {\\thesubsection}{1em}{}
+\\titleformat{\\subsubsection}
+  {\\normalfont\\sffamily\\bfseries}
+  {\\thesubsubsection}{1em}{}
+% \\fontdimen2\\font=3.91415pt
+% \\fontdimen3\\font=1pt
+% \\fontdimen4\\font=0pt
+% \\microtypecontext{spacing=french}
+%
+\\setmainfont[Mapping=tex-text]{STIX Two Text}
+\\setmathfont{STIX Two Math}
+\\setsansfont{Optima LT Std}
+\\setmonofont[Scale=0.84]{Consolas}
+%" t)))
+(setq org-latex-create-formula-image-program 'imagemagick)
+(setq org-latex-default-packages-alist
+      '(("AUTO" "inputenc" t)
+        ("T1" "fontenc" t)
+        ("" "fixltx2e" nil)
+        ("" "graphicx" t)
+        ("" "grffile" t)
+        ("" "longtable" nil)
+        ("" "wrapfig" nil)
+        ("" "rotating" nil)
+        ("normalem" "ulem" t)
+        ("" "amsmath" t)
+        ("" "amssymb" t)
+        ("" "capt-of" nil)
+        ("" "hyperref" nil)))
+(setq org-latex-classes
+      '(("article" "\\documentclass[9pt,letterpaper]{extarticle}" ;; "\\pdfmapfile{/home/andy/texmf/fonts/map/dvips/fedraserif/fedraserif.map}\n\\documentclass[9pt,letterpaper]{extarticle}"
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+         ("\\paragraph{%s}" . "\\paragraph*{%s}")
+         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+        ("report" "\\documentclass[11pt]{report}"
+         ("\\part{%s}" . "\\part*{%s}")
+         ("\\chapter{%s}" . "\\chapter*{%s}")
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+        ("book" "\\documentclass[11pt]{book}"
+         ("\\part{%s}" . "\\part*{%s}")
+         ("\\chapter{%s}" . "\\chapter*{%s}")
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+(setq org-html-htmlize-output-type 'css)
+(setq org-latex-pdf-process "lualatex")
